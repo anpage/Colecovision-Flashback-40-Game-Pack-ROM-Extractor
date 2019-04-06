@@ -5,9 +5,16 @@ import zlib
 import re
 
 # Rips ROMs and BIOS from the Steam release of Colecovision Flashback
+# Patches bad ROMs to match clean No-Intro dumps
 
 # From v121514
 ROMS = [
+    {
+        'name': "[BIOS] ColecoVision (USA, Europe).col",
+        'offset': 0x4772c,
+        'size': 0x2000,
+        'crc32': 0x3aa93ef3,
+    },
     {
         'name': "Antarctic Adventure (USA, Europe).col",
         'offset': 0x54d40,
@@ -15,7 +22,7 @@ ROMS = [
         'crc32': 0x275c800e,
     },
     {
-        'name': "Aquattack (USA) [b].col",  # GoodCol Unverified
+        'name': "Aquattack (USA) [b].col",
         'offset': 0x58d40,
         'size': 0x4000,
         'crc32': 0x275a7013,
@@ -48,7 +55,7 @@ ROMS = [
         'crc32': 0x39d4215b,
     },
     {
-        'name': "Evolution (Canada) [b].col",  # GoodCol Verified
+        'name': "Evolution (Canada) [b].col",
         'offset': 0x6ed40,
         'size': 0x4000,
         'crc32': 0xdff01cf7,
@@ -57,7 +64,7 @@ ROMS = [
         ],
     },
     {
-        'name': "Fathom (USA) [b].col",  # GoodCol Unverified
+        'name': "Fathom (USA) [b].col",
         'offset': 0x72d40,
         'size': 0x4000,
         'crc32': 0x9eb58823,
@@ -66,7 +73,7 @@ ROMS = [
         ],
     },
     {
-        'name': "Flipper Slipper (USA, Europe) [b].col",  # GoodCol Verified
+        'name': "Flipper Slipper (USA, Europe) [b].col",
         'offset': 0x76d40,
         'size': 0x4000,
         'crc32': 0x7e97a22e,
@@ -99,7 +106,7 @@ ROMS = [
         'crc32': 0xfdb75be6,
     },
     {
-        'name': "Gust Buster (USA) [b].col",  # Bad dump
+        'name': "Gust Buster (USA) [b].col",
         'offset': 0x90d40,
         'size': 0x4000,
         'crc32': 0xf2cac67c,
@@ -117,7 +124,7 @@ ROMS = [
         'crc32': 0x60c69e8,
     },
     {
-        'name': "Jungle Hunt (USA) [b].col",  # GoodCol Unverified
+        'name': "Jungle Hunt (USA) [b].col",
         'offset': 0x98d40,
         'size': 0x6000,
         'crc32': 0xe8858484,
@@ -162,7 +169,7 @@ ROMS = [
         'crc32': 0xadd10242,
     },
     {
-        'name': "Omega Race (USA, Europe) [b].col",  # GoodCol Alternative
+        'name': "Omega Race (USA, Europe) [b].col",
         'offset': 0xbcb40,
         'size': 0x4000,
         'crc32': 0x9921ecb5,
@@ -183,7 +190,7 @@ ROMS = [
         'crc32': 0xeec81c42,
     },
     {
-        'name': "Rolloverture (USA) [b].col",  # GoodCol Unverified
+        'name': "Rolloverture (USA) [b].col",
         'offset': 0xc8b40,
         'size': 0x4000,
         'crc32': 0xe4585c0a,
@@ -193,7 +200,7 @@ ROMS = [
         ],
     },
     {
-        'name': "Sammy Lightfoot (USA) [b].col",  # GoodCol Unverified
+        'name': "Sammy Lightfoot (USA) [b].col",
         'offset': 0xccb40,
         'size': 0x4000,
         'crc32': 0xc5f69a1b,
@@ -208,7 +215,7 @@ ROMS = [
         ],
     },
     {
-        'name': "Sir Lancelot (USA) [b].col",  # GoodCol Alternative
+        'name': "Sir Lancelot (USA) [b].col",
         'offset': 0xd0b40,
         'size': 0x4000,
         'crc32': 0xdd76775d,
@@ -218,7 +225,7 @@ ROMS = [
         ],
     },
     {
-        'name': "Slurpy (USA) [b].col",  # GoodCol Unverified
+        'name': "Slurpy (USA) [b].col",
         'offset': 0xd4b40,
         'size': 0x39C0,
         'crc32': 0x62792c90,
@@ -237,7 +244,7 @@ ROMS = [
         'crc32': 0x5bdf2997,
     },
     {
-        'name': "Squish'em Featuring Sam (USA) [b].col",  # GoodCol Verified
+        'name': "Squish'em Featuring Sam (USA) [b].col",
         'offset': 0xe2b40,
         'size': 0x4000,
         'crc32': 0x6c82e0cc,
@@ -252,7 +259,7 @@ ROMS = [
         'crc32': 0x84350129,
     },
     {
-        'name': "Heist, The (USA) [b].col",  # Bad dump
+        'name': "Heist, The (USA) [b].col",
         'offset': 0xeab40,
         'size': 0x6000,
         'crc32': 0x6f2e2d84,
@@ -286,7 +293,7 @@ ROMS = [
         'crc32': 0x261b7d56,
     },
     {
-        'name': "Wing War (USA) [b].col",  # GoodCol Alternative
+        'name': "Wing War (USA) [b].col",
         'offset': 0x102b40,
         'size': 0x4000,
         'crc32': 0x4eeef44,
@@ -299,12 +306,6 @@ ROMS = [
         'offset': 0x106b40,
         'size': 0x6000,
         'crc32': 0x8cb0891a,
-    },
-    {
-        'name': "[BIOS] ColecoVision (USA, Europe).col",  # BIOS
-        'offset': 0x4772c,
-        'size': 0x2000,
-        'crc32': 0x3aa93ef3,
     },
 ]
 
@@ -331,17 +332,19 @@ if __name__ == '__main__':
                 rom_data_patched = bytearray(rom_data)
                 for patch in rom['patch']:
                     rom_data_patched[patch[0]] = patch[1]
-                rom_file_patched = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
+                rom_file_patched = open(
+                    "ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
                 rom_file_patched.write(rom_data_patched)
                 rom_file_patched.close()
 
             if 'special' in rom.keys():
-                rom_data_patched = bytearray(rom_data) + bytearray([0xFF]*0x640)
-                rom_file_patched = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
+                # Slurpy needs some padding to match No-Intro
+                rom_data_patched = bytearray(
+                    rom_data) + bytearray([0xFF]*0x640)
+                rom_file_patched = open(
+                    "ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
                 rom_file_patched.write(rom_data_patched)
                 rom_file_patched.close()
         else:
             print("Checksum for ROM \"" + rom['name'] + "\" doesn't match:")
             print("Expected: " + hex(rom['crc32']) + ", Got: " + hex(rom_hash))
-
-
