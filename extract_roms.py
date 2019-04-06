@@ -319,30 +319,29 @@ if __name__ == '__main__':
 
     for rom in ROMS:
         start = rom['offset']
-        end = rom['offset']+rom['size']
+        end = start + rom['size']
         rom_data = exe_file[start:end]
         rom_hash = zlib.crc32(rom_data)
         if rom_hash == rom['crc32']:
             rom_file = open("ROMs/" + rom['name'], "wb")
             rom_file.write(rom_data)
             rom_file.close()
+
+            if 'patch' in rom.keys():
+                rom_data_patched = bytearray(rom_data)
+                for patch in rom['patch']:
+                    rom_data_patched[patch[0]] = patch[1]
+                rom_file_patched = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
+                rom_file_patched.write(rom_data_patched)
+                rom_file_patched.close()
+
+            if 'special' in rom.keys():
+                rom_data_patched = bytearray(rom_data) + bytearray([0xFF]*0x640)
+                rom_file_patched = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
+                rom_file_patched.write(rom_data_patched)
+                rom_file_patched.close()
         else:
             print("Checksum for ROM \"" + rom['name'] + "\" doesn't match:")
             print("Expected: " + hex(rom['crc32']) + ", Got: " + hex(rom_hash))
-            continue
 
-        if 'patch' in rom.keys():
-            rom_data_patched = bytearray(rom_data)
-            for patch in rom['patch']:
-                rom_data_patched[patch[0]] = patch[1]
-            rom_file_patched = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
-            rom_file_patched.write(rom_data_patched)
-            rom_file_patched.close()
 
-        if 'special' in rom.keys():
-            rom_data_patched = bytearray(rom_data)
-            if rom['special'] == 'SLURPY':
-                rom_data_patched += bytearray([0xFF]*0x640)
-            rom_file_patched = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
-            rom_file_patched.write(rom_data_patched)
-            rom_file_patched.close()
