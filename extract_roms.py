@@ -19,9 +19,12 @@ ROMS = [
         'offset': 0x58d40,
         'size': 0x4000,
         'crc32': 0x275a7013,
+        'patch': [
+            [0x1A7B, 0xFF], [0x3FFF, 0x7f],
+        ],
     },
     {
-        'name': "Brain Strainers (USA, Europe).col",
+        'name': "Brain Strainers (USA).col",
         'offset': 0x5cd40,
         'size': 0x4000,
         'crc32': 0x829c967d,
@@ -49,18 +52,27 @@ ROMS = [
         'offset': 0x6ed40,
         'size': 0x4000,
         'crc32': 0xdff01cf7,
+        'patch': [
+            [0x3FFE, 0xFF],
+        ],
     },
     {
         'name': "Fathom (USA) [b].col",  # GoodCol Unverified
         'offset': 0x72d40,
         'size': 0x4000,
         'crc32': 0x9eb58823,
+        'patch': [
+            [0x3FFF, 0x00],
+        ],
     },
     {
-        'name': "Flipper Slipper (USA) (Unl) [b].col",  # GoodCol Verified
+        'name': "Flipper Slipper (USA, Europe) [b].col",  # GoodCol Verified
         'offset': 0x76d40,
         'size': 0x4000,
         'crc32': 0x7e97a22e,
+        'patch': [
+            [0x3FFF, 0x09],
+        ],
     },
     {
         'name': "Fortune Builder (USA).col",
@@ -95,8 +107,8 @@ ROMS = [
             [0x1D79, 0xFF], [0x1D7B, 0xFF],
             [0x1D7C, 0xFF], [0x1D7D, 0xFF],
             [0x1FFB, 0xFF], [0x1FFD, 0xFF],
-            [0x3FFF, 0x00]
-        ]
+            [0x3FFF, 0x00],
+        ],
     },
     {
         'name': "Jumpman Junior (USA, Europe).col",
@@ -109,6 +121,9 @@ ROMS = [
         'offset': 0x98d40,
         'size': 0x6000,
         'crc32': 0xe8858484,
+        'patch': [
+            [0x447D, 0xFF],
+        ],
     },
     {
         'name': "Miner 2049er Starring Bounty Bob (USA, Europe) (v1.1).col",
@@ -151,6 +166,9 @@ ROMS = [
         'offset': 0xbcb40,
         'size': 0x4000,
         'crc32': 0x9921ecb5,
+        'patch': [
+            [0x3FFE, 0xFF],
+        ],
     },
     {
         'name': "Pepper II (USA, Europe).col",
@@ -169,24 +187,42 @@ ROMS = [
         'offset': 0xc8b40,
         'size': 0x4000,
         'crc32': 0xe4585c0a,
+        'patch': [
+            [0x1AFD, 0xFF], [0x217D, 0xFF],
+            [0x3FFF, 0x4F],
+        ],
     },
     {
         'name': "Sammy Lightfoot (USA) [b].col",  # GoodCol Unverified
         'offset': 0xccb40,
         'size': 0x4000,
         'crc32': 0xc5f69a1b,
+        'patch': [
+            [0x3FF1, 0xFF], [0x3FF2, 0xFF],
+            [0x3FF3, 0xFF], [0x3FF4, 0xFF],
+            [0x3FF5, 0xFF], [0x3FF6, 0xFF],
+            [0x3FF7, 0xFF], [0x3FF8, 0xFF],
+            [0x3FF9, 0xFF], [0x3FFA, 0xFF],
+            [0x3FFB, 0xFF], [0x3FFC, 0xFF],
+            [0x3FFD, 0xFF], [0x3FFE, 0xFF],
+        ],
     },
     {
         'name': "Sir Lancelot (USA) [b].col",  # GoodCol Alternative
         'offset': 0xd0b40,
         'size': 0x4000,
         'crc32': 0xdd76775d,
+        'patch': [
+            [0x19CD, 0xFF], [0x21F9, 0xFF],
+            [0x3FFE, 0x41], [0x3FFF, 0x39],
+        ],
     },
     {
         'name': "Slurpy (USA) [b].col",  # GoodCol Unverified
         'offset': 0xd4b40,
-        'size': 0x6000,
-        'crc32': 0x27f5c0ad,
+        'size': 0x39C0,
+        'crc32': 0x62792c90,
+        'special': 'SLURPY',
     },
     {
         'name': "Space Fury (USA, Europe).col",
@@ -201,13 +237,16 @@ ROMS = [
         'crc32': 0x5bdf2997,
     },
     {
-        'name': "Squish 'Em Sam! (USA) [b].col",  # GoodCol Verified
+        'name': "Squish'em Featuring Sam (USA) [b].col",  # GoodCol Verified
         'offset': 0xe2b40,
         'size': 0x4000,
         'crc32': 0x6c82e0cc,
+        'patch': [
+            [0x3FFE, 0x6E], [0x3FFF, 0x20],
+        ],
     },
     {
-        'name': "Super Cross Force (USA).col",
+        'name': "Super Cross Force (USA, Europe).col",
         'offset': 0xe6b40,
         'size': 0x3000,
         'crc32': 0x84350129,
@@ -217,6 +256,10 @@ ROMS = [
         'offset': 0xeab40,
         'size': 0x6000,
         'crc32': 0x6f2e2d84,
+        'patch': [
+            [0x1066, 0x48], [0x5FFE, 0x70],
+            [0x5FFF, 0x66],
+        ],
     },
     {
         'name': "Threshold (USA).col",
@@ -247,6 +290,9 @@ ROMS = [
         'offset': 0x102b40,
         'size': 0x4000,
         'crc32': 0x4eeef44,
+        'patch': [
+            [0x3FFF, 0x00],
+        ],
     },
     {
         'name': "Zaxxon (USA, Europe).col",
@@ -289,6 +335,14 @@ if __name__ == '__main__':
             rom_data_patched = bytearray(rom_data)
             for patch in rom['patch']:
                 rom_data_patched[patch[0]] = patch[1]
+            rom_file_patched = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
+            rom_file_patched.write(rom_data_patched)
+            rom_file_patched.close()
+
+        if 'special' in rom.keys():
+            rom_data_patched = bytearray(rom_data)
+            if rom['special'] == 'SLURPY':
+                rom_data_patched += bytearray([0xFF]*0x640)
             rom_file_patched = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
             rom_file_patched.write(rom_data_patched)
             rom_file_patched.close()
