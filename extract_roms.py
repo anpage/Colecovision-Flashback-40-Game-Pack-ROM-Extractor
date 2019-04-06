@@ -289,6 +289,6 @@ if __name__ == '__main__':
             rom_data_patched = bytearray(rom_data)
             for patch in rom['patch']:
                 rom_data_patched[patch[0]] = patch[1]
-            rom_file = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
-            rom_file.write(rom_data_patched)
-            rom_file.close()
+            rom_file_patched = open("ROMs/" + re.sub(r' \[b\]', '', rom['name']), "wb")
+            rom_file_patched.write(rom_data_patched)
+            rom_file_patched.close()
