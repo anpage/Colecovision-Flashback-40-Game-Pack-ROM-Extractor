@@ -1,109 +1,74 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-# Rips Roms from the Steam release of Colecovision Flashback
+import os
+import zlib
 
-ROMS = [{'OFFSETS': [0x01740, 0x0573F]},
-        {'OFFSETS': [0x05740, 0x0973F]},
-        {'OFFSETS': [0x09740, 0x0D73F]},
-        {'OFFSETS': [0x0D740, 0x1373F]},
-        {'OFFSETS': [0x13740, 0x1773F]},
-        {'OFFSETS': [0x17740, 0x1B73F]},
-        {'OFFSETS': [0x1B740, 0x1F73F]},
-        {'OFFSETS': [0x1F740, 0x2373F]},
-        {'OFFSETS': [0x23740, 0x2773F]},
-        {'OFFSETS': [0x27740, 0x2F73F]},
-        {'OFFSETS': [0x2F740, 0x3373F]},
-        {'OFFSETS': [0x33740, 0x3973F]},
-        {'OFFSETS': [0x39740, 0x3D73F]},
-        {'OFFSETS': [0x3D740, 0x4173F]},
-        {'OFFSETS': [0x41740, 0x4573F]},
-        {'OFFSETS': [0x45740, 0x4B73F]},
-        {'OFFSETS': [0x4B740, 0x5173F]},
-        {'OFFSETS': [0x51740, 0x5573F]},
-        {'OFFSETS': [0x55740, 0x5973F]},
-        {'OFFSETS': [0x59740, 0x6153F]},
-        {'OFFSETS': [0x61540, 0x6553F]},
-        {'OFFSETS': [0x65540, 0x6953F]},
-        {'OFFSETS': [0x69540, 0x6D53F]},
-        {'OFFSETS': [0x6D540, 0x7153F]},
-        {'OFFSETS': [0x71540, 0x7553F]},
-        {'OFFSETS': [0x75540, 0x7953F]},
-        {'OFFSETS': [0x79540, 0x7D53F]},
-        {'OFFSETS': [0x7D540, 0x8153F]},
-        {'OFFSETS': [0x81540, 0x8753F]},
-        {'OFFSETS': [0x87540, 0x8B53F]},
-        {'OFFSETS': [0x8B540, 0x8F53F]},
-        {'OFFSETS': [0x8F540, 0x9353F]},
-        {'OFFSETS': [0x93540, 0x9753F]},
-        {'OFFSETS': [0x97540, 0x9D53F]},
-        {'OFFSETS': [0x9D540, 0xA153F]},
-        {'OFFSETS': [0xA1540, 0xA553F]},
-        {'OFFSETS': [0xA5540, 0xA953F]},
-        {'OFFSETS': [0xA9540, 0xAF53F]},
-        {'OFFSETS': [0xAF540, 0xB353F]},
-        {'OFFSETS': [0xB3540, 0xB953F]}]
+# Rips ROMs and BIOS from the Steam release of Colecovision Flashback
 
-# Rom filenames
-ROMFILE = [{'NAME': [str("AntarcticAdventure.cv")]},
-           {'NAME': [str("Aquattack.cv")]},
-           {'NAME': [str("BrainStrainers.cv")]},
-           {'NAME': [str("BumpnJump.cv")]},
-           {'NAME': [str("Choplifter.cv")]},
-           {'NAME': [str("CosmicAvenger.cv")]},
-           {'NAME': [str("Evolution.cv")]},
-           {'NAME': [str("Fathom.cv")]},
-           {'NAME': [str("FlipperSlipper.cv")]},
-           {'NAME': [str("FortuneBuilder.cv")]},
-           {'NAME': [str("FranticFreddy.cv")]},
-           {'NAME': [str("Frenzy.cv")]},
-           {'NAME': [str("GatewayToApshai.cv")]},
-           {'NAME': [str("GustBuster.cv")]},
-           {'NAME': [str("JumpmanJunior.cv")]},
-           {'NAME': [str("JungleHunt.cv")]},
-           {'NAME': [str("Miner2049er.cv")]},
-           {'NAME': [str("Moonsweeper.cv")]},
-           {'NAME': [str("MountainKing.cv")]},
-           {'NAME': [str("MsSpaceFury.cv")]},
-           {'NAME': [str("NovaBlast.cv")]},
-           {'NAME': [str("OilsWell.cv")]},
-           {'NAME': [str("OmegaRace.cv")]},
-           {'NAME': [str("PepperII.cv")]},
-           {'NAME': [str("QuintanaRoo.cv")]},
-           {'NAME': [str("Rolloverture.cv")]},
-           {'NAME': [str("SammyLightfoot.cv")]},
-           {'NAME': [str("SirLancelot.cv")]},
-           {'NAME': [str("Slurpy.cv")]},
-           {'NAME': [str("SpaceFury.cv")]},
-           {'NAME': [str("SpacePanic.cv")]},
-           {'NAME': [str("SquishemSam.cv")]},
-           {'NAME': [str("SuperCrossForce.cv")]},
-           {'NAME': [str("TheHeist.cv")]},
-           {'NAME': [str("Threshold.cv")]},
-           {'NAME': [str("TournamentTennis.cv")]},
-           {'NAME': [str("Venture.cv")]},
-           {'NAME': [str("WarRoom.cv")]},
-           {'NAME': [str("WingWar.cv")]},
-           {'NAME': [str("Zaxxon.cv")]}]
+# From v121514
+ROMS = [
+    {'name': "AntarcticAdventure.cv", 'offset': 0x54d40, 'size_kb': 16, 'crc32': 0x275c800e, },
+    {'name': "Aquattack.cv", 'offset': 0x58d40, 'size_kb': 16, 'crc32': 0x275a7013, },
+    {'name': "BrainStrainers.cv", 'offset': 0x5cd40, 'size_kb': 16, 'crc32': 0x829c967d, },
+    {'name': "BumpnJump.cv", 'offset': 0x60d40, 'size_kb': 24, 'crc32': 0x2b22d4, },
+    {'name': "Choplifter.cv", 'offset': 0x66d40, 'size_kb': 16, 'crc32': 0x30e0d48, },
+    {'name': "CosmicAvenger.cv", 'offset': 0x6ad40, 'size_kb': 16, 'crc32': 0x39d4215b, },
+    {'name': "Evolution.cv", 'offset': 0x6ed40, 'size_kb': 16, 'crc32': 0xdff01cf7, },
+    {'name': "Fathom.cv", 'offset': 0x72d40, 'size_kb': 16, 'crc32': 0x9eb58823, },
+    {'name': "FlipperSlipper.cv", 'offset': 0x76d40, 'size_kb': 16, 'crc32': 0x7e97a22e, },
+    {'name': "FortuneBuilder.cv", 'offset': 0x7ad40, 'size_kb': 32, 'crc32': 0x65bbbcb4, },
+    {'name': "FranticFreddy.cv", 'offset': 0x82d40, 'size_kb': 16, 'crc32': 0x8615c6e8, },
+    {'name': "Frenzy.cv", 'offset': 0x86d40, 'size_kb': 24, 'crc32': 0xbf1ccf04, },
+    {'name': "GatewayToApshai.cv", 'offset': 0x8cd40, 'size_kb': 16, 'crc32': 0x726b64d, },
+    {'name': "GustBuster.cv", 'offset': 0x90d40, 'size_kb': 16, 'crc32': 0xf2cac67c, },
+    {'name': "JumpmanJunior.cv", 'offset': 0x94d40, 'size_kb': 16, 'crc32': 0x60c69e8, },
+    {'name': "JungleHunt.cv", 'offset': 0x98d40, 'size_kb': 24, 'crc32': 0xe8858484, },
+    {'name': "Miner2049er.cv", 'offset': 0x9ed40, 'size_kb': 24, 'crc32': 0xb24f10fd, },
+    {'name': "Moonsweeper.cv", 'offset': 0xa4d40, 'size_kb': 16, 'crc32': 0x8a303f5a, },
+    {'name': "MountainKing.cv", 'offset': 0xa8d40, 'size_kb': 16, 'crc32': 0xc173bbec, },
+    {'name': "MsSpaceFury.cv", 'offset': 0xacd40, 'size_kb': 31, 'crc32': 0x4c282755, },
+    {'name': "NovaBlast.cv", 'offset': 0xb4b40, 'size_kb': 16, 'crc32': 0xea06f585, },
+    {'name': "OilsWell.cv", 'offset': 0xb8b40, 'size_kb': 16, 'crc32': 0xadd10242, },
+    {'name': "OmegaRace.cv", 'offset': 0xbcb40, 'size_kb': 16, 'crc32': 0x9921ecb5, },
+    {'name': "PepperII.cv", 'offset': 0xc0b40, 'size_kb': 16, 'crc32': 0x53b85e20, },
+    {'name': "QuintanaRoo.cv", 'offset': 0xc4b40, 'size_kb': 16, 'crc32': 0xeec81c42, },
+    {'name': "Rolloverture.cv", 'offset': 0xc8b40, 'size_kb': 16, 'crc32': 0xe4585c0a, },
+    {'name': "SammyLightfoot.cv", 'offset': 0xccb40, 'size_kb': 16, 'crc32': 0xc5f69a1b, },
+    {'name': "SirLancelot.cv", 'offset': 0xd0b40, 'size_kb': 16, 'crc32': 0xdd76775d, },
+    {'name': "Slurpy.cv", 'offset': 0xd4b40, 'size_kb': 24, 'crc32': 0x27f5c0ad, },
+    {'name': "SpaceFury.cv", 'offset': 0xdab40, 'size_kb': 16, 'crc32': 0xdf8de30f, },
+    {'name': "SpacePanic.cv", 'offset': 0xdeb40, 'size_kb': 16, 'crc32': 0x5bdf2997, },
+    {'name': "SquishemSam.cv", 'offset': 0xe2b40, 'size_kb': 16, 'crc32': 0x6c82e0cc, },
+    {'name': "SuperCrossForce.cv", 'offset': 0xe6b40, 'size_kb': 16, 'crc32': 0x8093b672, },
+    {'name': "TheHeist.cv", 'offset': 0xeab40, 'size_kb': 24, 'crc32': 0x6f2e2d84, },
+    {'name': "Threshold.cv", 'offset': 0xf0b40, 'size_kb': 16, 'crc32': 0x1593f7df, },
+    {'name': "TournamentTennis.cv", 'offset': 0xf4b40, 'size_kb': 16, 'crc32': 0xc1d5a702, },
+    {'name': "Venture.cv", 'offset': 0xf8b40, 'size_kb': 16, 'crc32': 0x8e5a4aa3, },
+    {'name': "WarRoom.cv", 'offset': 0xfcb40, 'size_kb': 24, 'crc32': 0x261b7d56, },
+    {'name': "WingWar.cv", 'offset': 0x102b40, 'size_kb': 16, 'crc32': 0x4eeef44, },
+    {'name': "Zaxxon.cv", 'offset': 0x106b40, 'size_kb': 24, 'crc32': 0x8cb0891a, },
+    {'name': "COLECO.ROM", 'offset': 0x4772c, 'size_kb': 8, 'crc32': 0x3aa93ef3, },  # BIOS
+]
 
 if __name__ == '__main__':
-    f = open("AUTO", "rb")
+    # File is only ~5MB
+    f = open("CV40-121514.exe", "rb")
+    exe_file = f.read()
+    f.close()
 
-    try:
-        autofile = f.read()
-    finally:
-        f.close
+    if not os.path.exists("ROMs"):
+        os.makedirs("ROMs")
 
-    for i in range(0, 40):
-        for section in ['OFFSETS']:
-            if ROMS[i][section]:
-                start = f.seek(ROMS[i][section][0], 0)
-                end = f.seek(ROMS[i][section][1], 0)
-                game = autofile[start:end]
-        for section in ['NAME']:
-            if ROMFILE[i][section]:
-                romfilename = ROMFILE[i][section][0]
-                filename = open(romfilename, "wb")
-        try:
-            filename.write(game)
-        finally:
-            filename.close()
+    for rom in ROMS:
+        start = rom['offset']
+        end = rom['offset']+rom['size_kb']*1024
+        rom_data = exe_file[start:end]
+        rom_hash = zlib.crc32(rom_data)
+        if rom_hash == rom['crc32']:
+            rom_file = open("ROMs/" + rom['name'], "wb")
+            rom_file.write(rom_data)
+            rom_file.close()
+        else:
+            print("Checksum for ROM \"" + rom['name'] + "\" doesn't match:")
+            print("Expected: " + hex(rom['crc32']) + ", Got: " + hex(rom_hash))
+
